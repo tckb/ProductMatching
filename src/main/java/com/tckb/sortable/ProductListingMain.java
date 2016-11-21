@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 /**
@@ -43,7 +44,7 @@ public class ProductListingMain {
 		Instant now = Instant.now();
 		final Map<Product, List<ProductListing>> matchingData = recordLinker.matchRecords(products, listings);
 
-		LOGGER.info("matching time: " + ChronoUnit.SECONDS.between(now, Instant.now()) + "sec");
+		System.out.println("matching time: " + ChronoUnit.MILLIS.between(now, Instant.now()) + "ms");
 
 		List<ProductMatch> productListings = new ArrayList<>();
 		for (final Entry<Product, List<ProductListing>> matchedEntries : matchingData.entrySet()) {
@@ -54,7 +55,14 @@ public class ProductListingMain {
 
 	private static void checkArgs(final String[] args) {
 		if (args.length < 3) {
-			throw new IllegalArgumentException("require 2 args: </path/to/products.jsonl> </path/to/listing.jsonl> </path/to/output.jsonl>");
+			throw new IllegalArgumentException("require 3 args: </path/to/products.jsonl> </path/to/listing.jsonl> </path/to/output.jsonl> [verbose]");
+		} else {
+			// just a verbose condition
+			if (args.length == 3) {
+				LogManager.getLogManager().reset();
+				Logger globalLogger = Logger.getLogger(java.util.logging.Logger.GLOBAL_LOGGER_NAME);
+				globalLogger.setLevel(java.util.logging.Level.OFF);
+			}
 		}
 	}
 

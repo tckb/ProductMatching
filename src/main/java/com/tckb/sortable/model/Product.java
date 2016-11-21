@@ -21,6 +21,7 @@ import lombok.ToString;
 @EqualsAndHashCode(exclude = {"productName", "announcedDate"})
 @JsonInclude(Include.NON_NULL)
 public class Product implements DataRecord {
+
 	@JsonProperty("product_name")
 	private String productName = "";
 	private String manufacturer = "";

@@ -17,7 +17,7 @@ public abstract class AbstractRecordLinker {
 	}
 
 	protected double checkAndGetScore(Field f1, Field f2) {
-		for (int i = 0, criterionSize = criterion.size(); i < criterionSize; i++) {
+		for (int i = 0, criterionSize = criterion.size(); i < criterionSize; ++i) {
 			final FieldMatchingCriteria criteria = criterion.get(i);
 			if (criteria.accept(f1, f2) && matches(f1, f2)) {
 				return criteria.getWeight();

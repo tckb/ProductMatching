@@ -25,11 +25,6 @@ public class ProductListing implements DataRecord {
 	private String price = "";
 	private String manufacturer = "";
 
-	@JsonIgnore
-	public String[] getEntities() {
-		return title.split(" ");
-	}
-
 	@Override
 	@JsonIgnore
 	public Field[] getFields() {

@@ -22,7 +22,7 @@ mvn clean package
 echo "////"
 
 echo -e "\n running the project"
-java -jar target/product-matching-1.0-SNAPSHOT-jar-with-dependencies.jar $PRODUCTS_FILE $LISTING_FILE $OUTPUT
+java -jar target/product-matching-1.0-SNAPSHOT-jar-with-dependencies.jar $PRODUCTS_FILE $LISTING_FILE $OUTPUT $1
 echo "////"
 echo "..done"
 
