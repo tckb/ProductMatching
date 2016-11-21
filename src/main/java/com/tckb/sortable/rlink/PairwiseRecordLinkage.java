@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 /**
  * links the record by pairwise checking of records in the lists
@@ -13,10 +12,9 @@ import java.util.logging.Logger;
  * @author tckb
  */
 public class PairwiseRecordLinkage extends AbstractRecordLinker implements RecordLinker {
-	protected final Logger LOGGER = Logger.getLogger(getClass().getName());
 
-	public PairwiseRecordLinkage(final double threshold, final List<FieldMatchingCriteria> criterion) {
-		super(threshold, criterion);
+	public PairwiseRecordLinkage(final double threshold, final List<FieldMatchingCriteria> criterion, final FieldMatcher matcher) {
+		super(threshold, criterion, matcher);
 	}
 
 	@Override

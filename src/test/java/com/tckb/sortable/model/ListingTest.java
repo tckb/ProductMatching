@@ -3,6 +3,7 @@ package com.tckb.sortable.model;
 import com.tckb.sortable.rlink.FieldMatchingCriteria;
 import com.tckb.sortable.rlink.PairwiseRecordLinkage;
 import com.tckb.sortable.rlink.RecordLinker;
+import com.tckb.sortable.rlink.SubstringMatcher;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -34,7 +35,7 @@ public class ListingTest {
 
 	@BeforeMethod
 	public void setUp() throws Exception {
-		recordLinker = new PairwiseRecordLinkage(0.9, matchingCriteria());
+		recordLinker = new PairwiseRecordLinkage(0.9, matchingCriteria(), new SubstringMatcher());
 		productSerializer = new JsonLineSerializer<>(Product.class);
 		productListingSerializer = new JsonLineSerializer<>(ProductListing.class);
 	}

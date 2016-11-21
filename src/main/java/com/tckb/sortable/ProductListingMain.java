@@ -7,6 +7,7 @@ import com.tckb.sortable.model.ProductMatch;
 import com.tckb.sortable.rlink.FieldMatchingCriteria;
 import com.tckb.sortable.rlink.PairwiseRecordLinkage;
 import com.tckb.sortable.rlink.RecordLinker;
+import com.tckb.sortable.rlink.SubstringMatcher;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,7 +40,7 @@ public class ProductListingMain {
 		final List<Product> products = productDataSerializer.deserialize(new File(args[0]));
 		final List<ProductListing> listings = productListingDataSerializer.deserialize(new File(args[1]));
 
-		final RecordLinker recordLinker = new PairwiseRecordLinkage(0.9, matchingCriteria());
+		final RecordLinker recordLinker = new PairwiseRecordLinkage(0.9, matchingCriteria(), new SubstringMatcher());
 
 		Instant now = Instant.now();
 		final Map<Product, List<ProductListing>> matchingData = recordLinker.matchRecords(products, listings);
