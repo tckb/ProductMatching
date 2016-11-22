@@ -2,7 +2,7 @@
 # script to build and run the project
 PRODUCTS_FILE=data/products.jsonl
 LISTING_FILE=data/listings.jsonl
-OUTPUT=products_listings.jsonl
+OUTPUT=data/products_listings.jsonl
 
 
 # sanity checks
