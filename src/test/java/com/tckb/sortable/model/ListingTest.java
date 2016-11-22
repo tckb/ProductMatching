@@ -3,6 +3,7 @@ package com.tckb.sortable.model;
 import com.tckb.sortable.rlink.FieldMatchingCriteria;
 import com.tckb.sortable.rlink.PairwiseRecordLinkage;
 import com.tckb.sortable.rlink.RecordLinker;
+import com.tckb.sortable.rlink.RecordLinker.MatchedRecord;
 import com.tckb.sortable.rlink.SubstringMatcher;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
@@ -12,7 +13,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created on 21/11/16.
@@ -58,11 +58,11 @@ public class ListingTest {
 
 		final List<ProductListing> listOfProductListings = productListingSerializer.deserialize(new File("data/test_listings.jsonl"));
 
-		final Map<Product, List<ProductListing>> matchRecords = recordLinker.matchRecords(listOfProducts, listOfProductListings);
+		final List<MatchedRecord<Product, ProductListing>> matchedRecords = recordLinker.matchRecords(listOfProducts, listOfProductListings);
 
-		Assert.assertEquals(matchRecords.size(), listOfProducts.size());
-		Assert.assertEquals(matchRecords.get(pixelBlack).size(), 1);
-		Assert.assertEquals(matchRecords.get(moto2g).size(), 1);
+		Assert.assertEquals(matchedRecords.size(), listOfProducts.size());
+		Assert.assertEquals(matchedRecords.get(0).values.size(), 1);
+		Assert.assertEquals(matchedRecords.get(1).values.size(), 1);
 
 
 	}

@@ -1,7 +1,8 @@
 package com.tckb.sortable.rlink;
 
+import lombok.Data;
+
 import java.util.List;
-import java.util.Map;
 
 /**
  * A spec for record linkage
@@ -25,5 +26,11 @@ public interface RecordLinker {
 	 * @return a map containing the matches.
 	 * @see com.tckb.sortable.rlink.DataRecord
 	 */
-	<U extends DataRecord, T extends DataRecord> Map<T, List<U>> matchRecords(List<T> list1, List<U> list2);
+	<U extends DataRecord, T extends DataRecord> List<MatchedRecord<T, U>> matchRecords(List<T> list1, List<U> list2);
+
+	@Data
+	class MatchedRecord<T, U> {
+		public final T key;
+		public final List<U> values;
+	}
 }

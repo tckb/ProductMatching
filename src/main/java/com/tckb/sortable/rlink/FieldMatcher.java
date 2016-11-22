@@ -16,10 +16,10 @@ public interface FieldMatcher {
 	 * 		field 2
 	 * @return the similarity score ∈ [0,1]
 	 */
-	double computeScore(Field f1, Field f2);
+	double computeScore(String f1, String f2);
 
-	default boolean validateFields(final Field f1, final Field f2) {
-		return f1 != null && f1.getValue() != null && !f1.getValue().isEmpty() &&
-				f2 != null && f2.getValue() != null && !f2.getValue().isEmpty();
+	default boolean validateFields(final String f1, final String f2) {
+		return f1 != null && !f1.isEmpty() &&
+				f2 != null && !f2.isEmpty();
 	}
 }

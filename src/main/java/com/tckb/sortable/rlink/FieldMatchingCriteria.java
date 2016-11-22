@@ -1,6 +1,7 @@
 package com.tckb.sortable.rlink;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * A field-to-field matching criteria.
@@ -10,6 +11,7 @@ import lombok.Data;
  * @author tckb
  */
 @Data
+@EqualsAndHashCode(exclude = {"weight"})
 public class FieldMatchingCriteria {
 	final String field1Name;
 	final String field2Name;
@@ -31,6 +33,7 @@ public class FieldMatchingCriteria {
 	 * @return
 	 */
 	public boolean accept(final Field f1, final Field f2) {
-		return field1Name.equalsIgnoreCase(f1.name) && field2Name.equalsIgnoreCase(f2.name);
+		return f1.getName().equalsIgnoreCase(field1Name) &&
+				f2.getName().equalsIgnoreCase(field2Name);
 	}
 }

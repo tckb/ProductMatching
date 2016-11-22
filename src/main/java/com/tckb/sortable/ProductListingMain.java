@@ -5,8 +5,8 @@ import com.tckb.sortable.model.Product;
 import com.tckb.sortable.model.ProductListing;
 import com.tckb.sortable.model.ProductMatch;
 import com.tckb.sortable.rlink.FieldMatchingCriteria;
-import com.tckb.sortable.rlink.PairwiseRecordLinkage;
-import com.tckb.sortable.rlink.RecordLinker;
+import com.tckb.sortable.rlink.ParallelPairwiseRecordLinkage;
+import com.tckb.sortable.rlink.RecordLinker.MatchedRecord;
 import com.tckb.sortable.rlink.SubstringMatcher;
 
 import java.io.File;
@@ -16,8 +16,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
@@ -29,29 +27,31 @@ import java.util.logging.Logger;
 public class ProductListingMain {
 	protected final static Logger LOGGER = Logger.getLogger(ProductListingMain.class.getName());
 
-	@SuppressWarnings("unchecked")
 	public static void main(String[] args) throws IOException {
 		checkArgs(args);
 
 		final JsonLineSerializer<Product> productDataSerializer = new JsonLineSerializer<>(Product.class);
 		final JsonLineSerializer<ProductListing> productListingDataSerializer = new JsonLineSerializer<>(ProductListing.class);
-		final JsonLineSerializer<ProductMatch> productMatchDataSerializer = new JsonLineSerializer<>(ProductMatch.class);
 
 		final List<Product> products = productDataSerializer.deserialize(new File(args[0]));
 		final List<ProductListing> listings = productListingDataSerializer.deserialize(new File(args[1]));
 
-		final RecordLinker recordLinker = new PairwiseRecordLinkage(0.9, matchingCriteria(), new SubstringMatcher());
+
+//		Instant now = Instant.now();
+//		List<MatchedRecord<Product, ProductListing>> matchedRecords = new PairwiseRecordLinkage(0.9, matchingCriteria(), new SubstringMatcher())
+//				.matchRecords(products, listings);
+//		System.out.println("matching time: " + ChronoUnit.SECONDS.between(now, Instant.now()) + "sec");
+
 
 		Instant now = Instant.now();
-		final Map<Product, List<ProductListing>> matchingData = recordLinker.matchRecords(products, listings);
+		List<MatchedRecord<Product, ProductListing>> matchedRecords = new ParallelPairwiseRecordLinkage(0.9, matchingCriteria(), new SubstringMatcher())
+				.matchRecords(products, listings);
+		System.out.println("matching time: " + ChronoUnit.SECONDS.between(now, Instant.now()) + "sec");
 
-		System.out.println("matching time: " + ChronoUnit.MILLIS.between(now, Instant.now()) + "ms");
 
 		List<ProductMatch> productListings = new ArrayList<>();
-		for (final Entry<Product, List<ProductListing>> matchedEntries : matchingData.entrySet()) {
-			productListings.add(new ProductMatch(matchedEntries.getKey().getProductName(), matchedEntries.getValue()));
-		}
-		productMatchDataSerializer.serialize(productListings, new File(args[2]));
+		matchedRecords.forEach(data -> productListings.add(new ProductMatch(data.key.getProductName(), data.values)));
+		new JsonLineSerializer<>(ProductMatch.class).serialize(productListings, new File(args[2]));
 	}
 
 	private static void checkArgs(final String[] args) {
