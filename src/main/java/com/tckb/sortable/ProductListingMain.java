@@ -1,13 +1,14 @@
 package com.tckb.sortable;
 
-import com.tckb.sortable.model.JsonLineSerializer;
 import com.tckb.sortable.model.Product;
 import com.tckb.sortable.model.ProductListing;
 import com.tckb.sortable.model.ProductMatch;
-import com.tckb.sortable.rlink.FieldMatchingCriteria;
-import com.tckb.sortable.rlink.ParallelPairwiseRecordLinkage;
-import com.tckb.sortable.rlink.RecordLinker.MatchedRecord;
-import com.tckb.sortable.rlink.SubstringMatcher;
+import com.tckb.sortable.rlink.alg.RecordLinker.MatchedRecord;
+import com.tckb.sortable.rlink.alg.impl.NaivePairLinkage;
+import com.tckb.sortable.rlink.alg.impl.ParallelNaivePairLinkage;
+import com.tckb.sortable.rlink.alg.support.FieldMatchingCriteria;
+import com.tckb.sortable.rlink.alg.support.SubstringMatcher;
+import com.tckb.sortable.util.JsonLineSerializer;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,14 +38,14 @@ public class ProductListingMain {
 		final List<ProductListing> listings = productListingDataSerializer.deserialize(new File(args[1]));
 
 
-//		Instant now = Instant.now();
-//		List<MatchedRecord<Product, ProductListing>> matchedRecords = new PairwiseRecordLinkage(0.9, matchingCriteria(), new SubstringMatcher())
-//				.matchRecords(products, listings);
-//		System.out.println("matching time: " + ChronoUnit.SECONDS.between(now, Instant.now()) + "sec");
-
-
 		Instant now = Instant.now();
-		List<MatchedRecord<Product, ProductListing>> matchedRecords = new ParallelPairwiseRecordLinkage(0.9, matchingCriteria(), new SubstringMatcher())
+		List<MatchedRecord<Product, ProductListing>> matchedRecords = new NaivePairLinkage(0.9, matchingCriteria(), new SubstringMatcher())
+				.matchRecords(products, listings);
+		System.out.println("matching time: " + ChronoUnit.SECONDS.between(now, Instant.now()) + "sec");
+
+
+		now = Instant.now();
+		List<MatchedRecord<Product, ProductListing>> matchedRecords2 = new ParallelNaivePairLinkage(0.9, matchingCriteria(), new SubstringMatcher())
 				.matchRecords(products, listings);
 		System.out.println("matching time: " + ChronoUnit.SECONDS.between(now, Instant.now()) + "sec");
 

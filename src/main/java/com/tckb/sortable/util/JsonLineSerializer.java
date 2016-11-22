@@ -1,4 +1,4 @@
-package com.tckb.sortable.model;
+package com.tckb.sortable.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileUtils;
@@ -69,7 +69,6 @@ public final class JsonLineSerializer<T> {
 	 */
 	public void serialize(Collection<T> dataToWrite, File file) throws IOException {
 		LOGGER.info("Serializing " + dataToWrite.size() + " items to " + file.getName());
-
 
 		try (final BufferedWriter bufferedWriter = Files.newBufferedWriter(file.toPath(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {
 			Iterator<T> iterator = dataToWrite.iterator();

@@ -1,5 +1,6 @@
-package com.tckb.sortable.rlink;
+package com.tckb.sortable.rlink.alg;
 
+import com.tckb.sortable.rlink.DataRecord;
 import lombok.Data;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.tckb.sortable.model;
+package com.tckb.sortable.rlink.alg.support;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;

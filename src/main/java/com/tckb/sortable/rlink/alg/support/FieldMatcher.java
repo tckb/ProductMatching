@@ -1,4 +1,4 @@
-package com.tckb.sortable.rlink;
+package com.tckb.sortable.rlink.alg.support;
 
 /**
  * Created on 21/11/16.

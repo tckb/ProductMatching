@@ -1,11 +1,14 @@
-package com.tckb.sortable.model;
+package com.tckb.sortable;
 
-import com.tckb.sortable.rlink.FieldMatchingCriteria;
-import com.tckb.sortable.rlink.PairwiseRecordLinkage;
-import com.tckb.sortable.rlink.ParallelPairwiseRecordLinkage;
-import com.tckb.sortable.rlink.RecordLinker;
-import com.tckb.sortable.rlink.RecordLinker.MatchedRecord;
-import com.tckb.sortable.rlink.SubstringMatcher;
+import com.tckb.sortable.model.Product;
+import com.tckb.sortable.model.ProductListing;
+import com.tckb.sortable.rlink.alg.RecordLinker;
+import com.tckb.sortable.rlink.alg.RecordLinker.MatchedRecord;
+import com.tckb.sortable.rlink.alg.impl.NaivePairLinkage;
+import com.tckb.sortable.rlink.alg.impl.ParallelNaivePairLinkage;
+import com.tckb.sortable.rlink.alg.support.FieldMatchingCriteria;
+import com.tckb.sortable.rlink.alg.support.SubstringMatcher;
+import com.tckb.sortable.util.JsonLineSerializer;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -36,7 +39,7 @@ public class ListingTest {
 
 	@BeforeMethod
 	public void setUp() throws Exception {
-		recordLinker = new PairwiseRecordLinkage(0.9, matchingCriteria(), new SubstringMatcher());
+		recordLinker = new NaivePairLinkage(0.9, matchingCriteria(), new SubstringMatcher());
 		productSerializer = new JsonLineSerializer<>(Product.class);
 		productListingSerializer = new JsonLineSerializer<>(ProductListing.class);
 	}
@@ -72,10 +75,10 @@ public class ListingTest {
 		final List<Product> listOfProducts = productSerializer.deserialize(new File("data/test_products.jsonl"));
 		final List<ProductListing> listOfProductListings = productListingSerializer.deserialize(new File("data/test_listings.jsonl"));
 
-		final List<MatchedRecord<Product, ProductListing>> matchSerial = new PairwiseRecordLinkage(0.9, matchingCriteria(), new SubstringMatcher())
+		final List<MatchedRecord<Product, ProductListing>> matchSerial = new NaivePairLinkage(0.9, matchingCriteria(), new SubstringMatcher())
 				.matchRecords(listOfProducts, listOfProductListings);
 
-		final List<MatchedRecord<Product, ProductListing>> matchParallel = new ParallelPairwiseRecordLinkage(0.9, matchingCriteria(), new SubstringMatcher())
+		final List<MatchedRecord<Product, ProductListing>> matchParallel = new ParallelNaivePairLinkage(0.9, matchingCriteria(), new SubstringMatcher())
 				.matchRecords(listOfProducts, listOfProductListings);
 
 		Assert.assertEquals(matchSerial, matchParallel);
