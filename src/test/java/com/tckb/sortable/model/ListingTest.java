@@ -2,6 +2,7 @@ package com.tckb.sortable.model;
 
 import com.tckb.sortable.rlink.FieldMatchingCriteria;
 import com.tckb.sortable.rlink.PairwiseRecordLinkage;
+import com.tckb.sortable.rlink.ParallelPairwiseRecordLinkage;
 import com.tckb.sortable.rlink.RecordLinker;
 import com.tckb.sortable.rlink.RecordLinker.MatchedRecord;
 import com.tckb.sortable.rlink.SubstringMatcher;
@@ -64,7 +65,22 @@ public class ListingTest {
 		Assert.assertEquals(matchedRecords.get(0).values.size(), 1);
 		Assert.assertEquals(matchedRecords.get(1).values.size(), 1);
 
+	}
+
+	@Test
+	public void testParallelVsSerial() throws Exception {
+		final List<Product> listOfProducts = productSerializer.deserialize(new File("data/test_products.jsonl"));
+		final List<ProductListing> listOfProductListings = productListingSerializer.deserialize(new File("data/test_listings.jsonl"));
+
+		final List<MatchedRecord<Product, ProductListing>> matchSerial = new PairwiseRecordLinkage(0.9, matchingCriteria(), new SubstringMatcher())
+				.matchRecords(listOfProducts, listOfProductListings);
+
+		final List<MatchedRecord<Product, ProductListing>> matchParallel = new ParallelPairwiseRecordLinkage(0.9, matchingCriteria(), new SubstringMatcher())
+				.matchRecords(listOfProducts, listOfProductListings);
+
+		Assert.assertEquals(matchSerial, matchParallel);
 
 	}
+
 
 }
