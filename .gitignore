@@ -1,0 +1,8 @@
+
+.DS_Store
+.idea/
+ProductMatching.iml
+out.jsonl
+products_listings.jsonl
+target/
+src/main/resources/
